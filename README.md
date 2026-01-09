@@ -134,7 +134,7 @@ AI: ... (AI会根据历史对话和可能的新搜索回答，这里的"他"会�
 
 ## ⚠️ License / Copyright (版权声明)
 
-**Copyright (c) 2024 Zhang San. All rights reserved.**
+**Copyright (c) 2026 Feng Simo. All rights reserved.**
 
 This code is for demonstration purposes only. You may not use, modify, distribute, or sublicense this code.
 

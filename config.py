@@ -11,8 +11,8 @@ HEADLESS = False                    # False=显示浏览器
 CONTEXT_WINDOW = 32768              # 上下文窗口大小
 
 # === ⚙️ 修改后的配置参数 ===
-MAX_SEARCH_RESULTS = 30      # 最终决定阅读并抓取正文的网页总数
-MAX_PAGES_TO_SCAN = 4        # 搜索结果翻页次数（每翻一页约增加10-15条链接）
+MAX_SEARCH_RESULTS = 10      # 最终决定阅读并抓取正文的网页总数
+MAX_PAGES_TO_SCAN = 2        # 搜索结果翻页次数（每翻一页约增加10-15条链接）
 HISTORY_LIMIT = 5                   
 MEMORY_FILE = "hybrid_memory.json" # 记忆文件路径
 HIDE_WINDOW = True # 是否将浏览器窗口隐藏到屏幕外 (Playwright args中的 --window-position)

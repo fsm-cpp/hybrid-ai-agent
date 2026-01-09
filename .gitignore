@@ -8,7 +8,7 @@ env/
 .env
 
 # 项目特定的数据文件 (非常重要：不要上传你的私人记忆)
-hybrid_memory.json
+# hybrid_memory.json
 
 # 操作系统生成的垃圾文件
 .DS_Store

@@ -130,3 +130,12 @@ AI: ... (AI会根据历史对话和可能的新搜索回答，这里的"他"会�
 *   Ollama模型的性能和回答质量取决于所选模型的尺寸和能力。
 *   如果需要完全隐藏浏览器：`HIDE_WINDOW = True`。
 *   如果想要看到浏览器：`HIDE_WINDOW = False`。
+
+
+## ⚠️ License / Copyright (版权声明)
+
+**Copyright (c) 2024 Zhang San. All rights reserved.**
+
+This code is for demonstration purposes only. You may not use, modify, distribute, or sublicense this code.
+
+(本项目仅供展示，保留所有权利。严禁使用、修改、分发或再次许可本项目代码。)

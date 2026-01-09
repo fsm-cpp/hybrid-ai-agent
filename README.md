@@ -14,7 +14,7 @@ hybrid_agent_project/
 ├── main.py               # 程序入口，负责初始化和运行AI助手。
 ├── requirements.txt      # 项目依赖列表。
 ├── README.md             # 项目说明文件。
-└── hybrid_memory_v6.json # 记忆文件，存储对话历史，程序运行时自动创建或更新。
+└── hybrid_memory.json # 记忆文件，存储对话历史，程序运行时自动创建或更新。
 ```
 
 ## 功能特点

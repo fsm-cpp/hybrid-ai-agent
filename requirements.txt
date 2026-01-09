@@ -1,0 +1,5 @@
+ollama
+trafilatura
+playwright
+beautifulsoup4
+colorama

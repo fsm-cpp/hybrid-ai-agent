@@ -1,13 +1,13 @@
 # utils.py
 """
-通用辅助函数模块
+Common utility functions module
 """
 from config import HISTORY_LIMIT
 
 def get_limited_msgs(msgs):
     """
-    1. 永远保留 msgs[0:2] (第一轮完整对话)
-    2. 截取最近的 (HISTORY_LIMIT - 1) 轮对话
+    1. Always keep msgs[0:2] (the first full conversation round)
+    2. Keep the most recent (HISTORY_LIMIT - 1) rounds of conversation
     """
     if len(msgs) <= 2:
         return msgs

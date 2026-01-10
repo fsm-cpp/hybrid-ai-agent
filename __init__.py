@@ -1,3 +1,3 @@
 """
-智能联网助手项目包
+Smart Online Assistant project package
 """

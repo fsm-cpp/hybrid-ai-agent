@@ -1,19 +1,19 @@
-# Python 编译缓存
+# Python compiled caches
 __pycache__/
 *.py[cod]
 
-# 虚拟环境 (如果你创建了的话)
+# Virtual environments (if you create one)
 venv/
 env/
 .env
 
-# 项目特定的数据文件 (非常重要：不要上传你的私人记忆)
+# Project-specific data files (important: do not commit your private memory)
 # hybrid_memory.json
 
-# 操作系统生成的垃圾文件
+# OS generated junk files
 .DS_Store
 Thumbs.db
 
-# 编辑器配置 (可选)
+# Editor configs (optional)
 .vscode/
 .idea/

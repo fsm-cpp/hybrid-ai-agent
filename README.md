@@ -1,64 +1,59 @@
 # Smart Online Assistant (Deep Historical Awareness)
 
-This project is a local AI assistant using Ollama and Playwright, featuring web search and hybrid memory. It understands conversational context, rewrites search queries, and answers using both live search results and conversation history.
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Ollama](https://img.shields.io/badge/AI-Ollama-000000?logo=ollama&logoColor=white)](https://ollama.com/)
+[![Playwright](https://img.shields.io/badge/Web-Playwright-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
+[![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
 
-## Project Structure
+> **An intelligent local AI agent featuring autonomous web search, hybrid memory management, and context-aware query rewriting.**
 
-```
-hybrid_agent_project/
-├── config.py             # Global configuration and constants (model names, context window, search limits, etc.)
-├── utils.py              # Utility helper functions (e.g., trimming history length).
-├── memory.py             # Memory management: load, save, and summarize conversation history.
-├── search.py             # Web search functions using Playwright for scraping and pagination.
-├── agent.py              # Core AI agent combining memory, search, and LLM interactions.
-├── main.py               # Entry point to initialize and run the assistant.
-├── requirements.txt      # Project dependencies.
-├── README.md             # Project documentation.
-└── hybrid_memory.json    # Memory file storing conversation history; created/updated at runtime.
-```
+## 📖 Overview
 
-## Features
+**Smart Online Assistant** is a privacy-first, local AI agent powered by **Ollama** (LLMs) and **Playwright**. Unlike standard chatbots, it bridges the gap between offline privacy and real-time information.
 
-*   **Hybrid Memory Modes**: Supports `raw` (full-text) and `zip` (summarized) memory modes. In `zip` mode the assistant compresses past content to save context tokens.
-*   **Deep Historical Awareness**: `analyze_intent` rewrites search queries using a small window of recent history to improve relevance.
-*   **Smart Web Search**: Uses DuckDuckGo for queries and Playwright to simulate browsing, pagination, and content extraction.
-*   **Commands**:
-    *   `/s <text>`: Force an online search; the assistant will rewrite the query using history and `<text>`.
-    *   `/n <text>`: Force no-online-search; answer only from known knowledge and memory.
-    *   `/raw`: Switch memory mode to `raw`.
-    *   `/zip`: Switch memory mode to `zip` (summarized).
-    *   `/clear`: Clear all stored memory.
-    *   `exit`, `quit`, `q`: Exit the program.
-*   **Configurable**: All key parameters are editable in `config.py`.
+It implements a **RAG (Retrieval-Augmented Generation)** workflow that autonomously browses the web when necessary, rewrites search queries based on conversation history, and manages context using a unique **Hybrid Memory (Raw/Zip)** system.
 
-## Setup
+## ✨ Key Features
 
-1.  **Python environment**: Ensure Python 3.9+ is installed.
+*   **🌐 Autonomous Web Search**: Uses Playwright to simulate human browsing (DuckDuckGo), handling pagination and anti-scraping to fetch real-time data without API costs.
+*   **🧠 Hybrid Memory Architecture**:
+    *   **Raw Mode**: Retains full-text conversation history.
+    *   **Zip Mode**: Automatically summarizes past interactions to save context window tokens while retaining key facts.
+*   **🔄 Context-Aware Intent Analysis**: The agent analyzes your intent (`analyze_intent`) and rewrites search keywords using recent history to ensure search results are relevant.
+*   **⚡ Local & Private**: Powered entirely by local models (e.g., `qwen3:30b-instruct`). Your data stays on your machine.
+*   **🛠️ Full Control**: Force search (`/s`), force offline (`/n`), or switch memory modes instantly via commands.
 
-2.  **Ollama**:
-    *   Install Ollama following instructions at [ollama.com](https://ollama.com/).
-    *   Pull required model(s) (e.g., `qwen3:30b-instruct`). Run:
-        ```bash
-        ollama run qwen3:30b-instruct
-        # wait for the model to download
-        ```
-        Make sure `MODEL_NAME` and `SUMMARY_MODEL` in `config.py` match an available local model.
+## 🚀 Quick Start
 
-3.  **Install dependencies**:
+### Prerequisites
+1.  **Python 3.9+** installed.
+2.  **[Ollama](https://ollama.com/)** installed and running.
+
+### Installation
+
+1.  **Clone the repository** (if applicable) or download the source.
+
+2.  **Install Python dependencies**:
     ```bash
     cd hybrid_agent_project
     pip install -r requirements.txt
     ```
 
-4.  **Install Playwright browser**:
+3.  **Install Playwright Browser**:
     ```bash
     playwright install chromium
     ```
 
-## Running the Assistant
+4.  **Prepare the Model**:
+    Pull the required model (ensure it matches `MODEL_NAME` in `config.py`):
+    ```bash
+    ollama run qwen3:30b-instruct
+    # Wait for the model to download
+    ```
 
-From the `hybrid_agent_project` directory run:
+### Running the Assistant
 
+Run the main script:
 ```bash
 python main.py
 ```
@@ -69,67 +64,57 @@ Or run as a module:
 python -m hybrid_agent_project.main
 ```
 
-## Usage
+## 💡 Usage
 
-On startup you should see a prompt like:
+Once started, interact with the agent naturally or use the following commands:
 
-```
-=== Smart Online Assistant V7.0 (Deep Historical Awareness) ===
-Commands: /s <text> (force-search, assistant rewrites query) | /n <text> (no-search) | /raw (raw memory) | /zip (summarize memory) | /clear (clear memory)
---------------------------------------------------
+| Command | Description |
+| :--- | :--- |
+| `/s <text>` | **Force Search**: Rewrites query based on history + `<text>` and searches the web. |
+| `/n <text>` | **No Search**: Forces the LLM to answer from internal knowledge/memory only. |
+| `/raw` | Switch memory to **Full-text** mode. |
+| `/zip` | Switch memory to **Summarized** mode (saves tokens). |
+| `/clear` | Clear all conversation history. |
+| `exit` / `q` | Quit the application. |
 
-You [📉 compressed]:
-```
+### 📄 Real-World Examples
+> **Check [`real_chat.txt`](real_chat.txt) for a full log of actual conversations, search processes, and memory compression in action.**
 
-Type questions or use commands to interact with the assistant.
-
-Example conversation:
-
-```
-You [📉 compressed]: Any recent developments in AI models?
-AI is thinking...
-AI: ... (performs online search and responds)
-
+### Example Output
+```text
 You [📉 compressed]: /s Bill Gates net worth
-🔧 [manual force-search] Assistant rewrites query -> Bill Gates net worth
->> 🌐 Performing web search and simulated pagination: Bill Gates net worth
-... (search process)
+🔧 [manual force-search] Assistant rewrites query -> Bill Gates net worth 2026
+>> 🌐 Performing web search and simulated pagination...
 AI is thinking...
-AI: ... (responds based on search results)
-
-You [📉 compressed]: /raw
->> Mode switched to: raw
-You [📝 raw]: Has he launched any new philanthropy projects recently?
-AI is thinking...
-AI: ... (answers using history or additional search; 'he' is resolved to Bill Gates)
-
-You [📝 raw]: /clear
-Memory cleared!
-You [📝 raw]:
+AI: ... (Responds based on live search results)
 ```
-Real chat examples are in `real_chat.txt`.
 
-## Configuration
+## ⚙️ Configuration
 
-Edit `config.py` to adjust assistant behavior:
+Edit `config.py` to customize the agent's behavior:
 
-*   `MODEL_NAME`, `SUMMARY_MODEL`: change the Ollama models used.
-*   `HEADLESS`, `HIDE_WINDOW`: control Playwright browser visibility.
-*   `CONTEXT_WINDOW`: set the model context window size.
-*   `MAX_SEARCH_RESULTS`, `MAX_PAGES_TO_SCAN`: tune search behavior.
-*   `HISTORY_LIMIT`: how many recent turns are considered for intent analysis.
-*   `MEMORY_FILE`: change the memory filename.
+*   `MODEL_NAME`: The Ollama model to use (default: `qwen3:30b-instruct`).
+*   `SUMMARY_MODEL`: The model used for compressing memory.
+*   `HIDE_WINDOW`: Set to `False` to watch the browser scrape in real-time.
+*   `HISTORY_LIMIT`: Number of turns used for intent analysis.
+*   `MEMORY_FILE`: Path to the JSON memory file.
 
-## Notes
+## 📂 Project Structure
 
-*   Web search success depends on network conditions and target sites' anti-scraping measures.
-*   Ollama model performance and response quality depend on the model chosen.
-*   To completely hide the browser set `HIDE_WINDOW = True`.
-*   To show the browser set `HIDE_WINDOW = False`.
-
+```text
+hybrid_agent_project/
+├── agent.py              # Core Logic: Combines LLM, Memory, and Search
+├── search.py             # Web Scraping: Playwright & DuckDuckGo integration
+├── memory.py             # Memory System: JSON handling & Summarization
+├── config.py             # Settings: Models, timeouts, search limits
+├── main.py               # Entry Point: CLI Loop
+├── utils.py              # Helpers: Text processing
+├── real_chat.txt         # Log of real usage examples
+└── requirements.txt      # Dependencies
+```
 
 ## ⚠️ License / Copyright
 
 **Copyright (c) 2026 Feng Simo. All rights reserved.**
 
-This code is for demonstration purposes only. You may not use, modify, distribute, or sublicense this code.
+This code is for **demonstration purposes only**. You may not use, modify, distribute, or sublicense this code without explicit permission.

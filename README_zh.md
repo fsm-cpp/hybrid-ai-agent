@@ -1,141 +1,119 @@
 # 智能联网助手 (深度历史感知)
 
-这是一个基于 Ollama 和 Playwright 的智能AI本地大模型助手，具备联网搜索和混合记忆功能。它能够理解对话上下文，重构搜索关键词，并根据实时搜索结果和历史对话进行回答。
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Ollama](https://img.shields.io/badge/AI-Ollama-000000?logo=ollama&logoColor=white)](https://ollama.com/)
+[![Playwright](https://img.shields.io/badge/Web-Playwright-45ba4b?logo=playwright&logoColor=white)](https://playwright.dev/)
+[![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
 
-## 项目结构
+> **一个基于开源大语言模型的智能本地 AI Agent，具备免费自主联网搜索、混合记忆管理和上下文感知查询重写功能。**
 
-```
-hybrid_agent_project/
-├── config.py             # 全局配置和常量，例如模型名称、上下文窗口、搜索结果数量等。
-├── utils.py              # 通用辅助函数，如限制历史消息数量。
-├── memory.py             # 记忆管理模块，处理对话历史的加载、保存和压缩。
-├── search.py             # 网络搜索功能模块，使用Playwright进行网页搜索和内容提取。
-├── agent.py              # 核心AI代理模块，整合记忆管理、搜索和LLM交互逻辑。
-├── main.py               # 程序入口，负责初始化和运行AI助手。
-├── requirements.txt      # 项目依赖列表。
-├── README.md             # 项目说明文件。
-└── hybrid_memory.json # 记忆文件，存储对话历史，程序运行时自动创建或更新。
-```
+## 📖 项目概述
 
-## 功能特点
+**Smart Online Assistant** 是一个“隐私优先”的本地 AI Agent，由 **Ollama** (LLM) 和 **Playwright** 驱动。与普通聊天机器人不同，它打通了离线隐私与实时信息之间的壁垒。
 
-*   **混合记忆模式**: 支持"原文模式"（`raw`）和"压缩模式"（`zip`），在压缩模式下，AI会自动提炼回答摘要以节省上下文。
-*   **深度历史感知**: `analyze_intent` 函数结合受限的对话历史来重构搜索关键词，使搜索更精准。
-*   **智能联网搜索**: 使用 DuckDuckGo 进行搜索，并通过 Playwright 模拟浏览器操作，包括翻页和内容抓取。
-*   **指令控制**:
-    *   `/s <内容>`: 强制联网搜索，AI会根据历史和 `<内容>` 重新生成搜索词。
-    *   `/n <内容>`: 强制不联网搜索，仅根据已知知识和记忆回答 `<内容>`。
-    *   `/raw`: 切换记忆模式到原文模式。
-    *   `/zip`: 切换记忆模式到压缩模式。
-    *   `/clear`: 清空所有历史记忆。
-    *   `exit`, `quit`, `退出`, `q`: 退出程序。
-*   **自定义配置**: 所有的关键参数都可在 `config.py` 文件中进行调整。
+它实现了一套 **RAG (检索增强生成)** 工作流：能在必要时自主浏览网页，根据对话历史重写搜索查询，并通过独特的 **混合记忆 (Raw/Zip)** 系统管理上下文，确保回答既实时又准确。
 
-## 环境准备
+## ✨ 核心功能
 
-1.  **Python 环境**: 确保你的系统安装了 Python 3.9+。
+*   **🌐 自主联网搜索**: 使用 Playwright 模拟人类浏览行为 (DuckDuckGo)，自动处理翻页和反爬虫机制，无需 API 费用即可获取实时数据。
+*   **🧠 混合记忆架构**:
+    *   **Raw 模式**: 保留完整的全文对话历史。
+    *   **Zip 模式**: 自动总结过往交互内容，在保留关键事实的同时大幅节省上下文 Token。
+*   **🔄 上下文感知意图分析**: Agent 会分析你的意图 (`analyze_intent`) 并利用近期历史重写搜索关键词，确保搜索结果与当前对话高度相关。
+*   **⚡ 本地与隐私**: 完全由本地模型驱动 (如 `qwen3:30b-instruct`)。所有数据均保留在你的机器上。
+*   **🛠️ 完全掌控**: 支持通过指令强制搜索 (`/s`)、强制离线 (`/n`) 或即时切换记忆模式。
 
-2.  **Ollama**:
-    *   安装 Ollama 服务：访问 [ollama.com](https://ollama.com/) 下载并安装。
-    *   拉取所需的模型（例如 `qwen3:30b-instruct`）。在终端运行：
-        ```bash
-        ollama run qwen3:30b-instruct
-        # 等待模型下载完成
-        ```
-        请确保 `config.py` 中 `MODEL_NAME` 和 `SUMMARY_MODEL` 设置的模型已拉取。
+## 🚀 快速开始
 
-3.  **安装项目依赖**:
+### 前置条件
+1.  已安装 **Python 3.9+**。
+2.  已安装并运行 **[Ollama](https://ollama.com/)**。
+
+### 安装步骤
+
+1.  **克隆仓库** (如果适用) 或下载源码。
+
+2.  **安装 Python 依赖**:
     ```bash
     cd hybrid_agent_project
     pip install -r requirements.txt
     ```
 
-4.  **安装 Playwright 浏览器**:
+3.  **安装 Playwright 浏览器**:
     ```bash
     playwright install chromium
     ```
 
-## 运行项目
+4.  **准备模型**:
+    拉取所需的模型 (请确保与 `config.py` 中的 `MODEL_NAME` 一致):
+    ```bash
+    ollama run qwen3:30b-instruct
+    # 等待模型下载完成
+    ```
 
-在 `hybrid_agent_project` 目录下，运行 `main.py` 文件：
+### 运行助手
 
+运行主脚本:
 ```bash
 python main.py
 ```
 
-或者作为模块运行：
-
+或者作为模块运行:
 ```bash
 python -m hybrid_agent_project.main
 ```
 
-## 使用说明
+## 💡 使用指南
 
-启动程序后，你将看到如下提示：
+启动后，你可以自然地与 Agent 对话，或使用以下指令：
 
-```
-=== 智能联网助手 V7.0 (深度历史感知) ===
-指令: /s <内容> 强搜(AI改写词) | /n <内容> 禁搜 | /raw 原文 | /zip 压缩 | /clear 清空记忆
---------------------------------------------------
+| 指令 | 说明 |
+| :--- | :--- |
+| `/s <文本>` | **强制搜索**: 基于历史 + `<文本>` 重写查询词并进行联网搜索。 |
+| `/n <文本>` | **不搜索**: 强制 LLM 仅利用内部知识/记忆进行回答。 |
+| `/raw` | 切换记忆至 **全文 (Full-text)** 模式。 |
+| `/zip` | 切换记忆至 **总结 (Summarized)** 模式 (节省 Token)。 |
+| `/clear` | 清除所有对话历史。 |
+| `exit` / `q` | 退出程序。 |
 
-你 [📉压缩]:
-```
+### 📄 真实案例
+> **请查看 [`real_chat.txt`](real_chat.txt) 获取完整的真实对话日志、搜索流程以及记忆压缩的实录。**
 
-你可以输入你的问题或使用指令来与AI互动。
-
-**示例对话：**
-
-```
-你 [📉压缩]: 最近有什么关于AI模型的新进展？
-AI 正在思考...
-AI: ... (AI会联网搜索并给出回答)
-
-你 [📉压缩]: /s 比尔盖茨的净资产是多少？
-🔧 [手动强搜] AI 基于背景重构关键词 -> 比尔盖茨 净资产
->> 🌐 正在联网检索并模拟翻页: 比尔盖茨 净资产
-... (搜索过程)
-AI 正在思考...
-AI: ... (AI会根据搜索结果回答)
-
-你 [📉压缩]: /raw
->> 模式已切换到: raw
-你 [📝原文]: 他最近有什么新的慈善项目吗？
-AI 正在思考...
-AI: ... (AI会根据历史对话和可能的新搜索回答，这里的"他"会识别为比尔盖茨)
-
-你 [📝原文]: /clear
-记忆已清空！
-你 [📝原文]:
-```
-**真实对话：**
-```
-见real_chat.txt
+### 输出示例
+```text
+You [📉 compressed]: /s Bill Gates net worth
+🔧 [manual force-search] Assistant rewrites query -> Bill Gates net worth 2026
+>> 🌐 Performing web search and simulated pagination...
+AI is thinking...
+AI: ... (根据实时搜索结果回答)
 ```
 
+## ⚙️ 配置说明
 
-## 配置修改
+编辑 `config.py` 可自定义 Agent 的行为：
 
-你可以修改 `config.py` 中的参数来调整助手的行为：
+*   `MODEL_NAME`: 用于对话的 Ollama 模型 (默认: `qwen3:30b-instruct`)。
+*   `SUMMARY_MODEL`: 用于压缩/总结记忆的模型。
+*   `HIDE_WINDOW`: 设为 `False` 可实时观看浏览器爬取过程 (Headless 模式)。
+*   `HISTORY_LIMIT`: 用于意图分析的历史轮数。
+*   `MEMORY_FILE`: JSON 记忆文件的路径。
 
-*   `MODEL_NAME`, `SUMMARY_MODEL`: 更改使用的Ollama模型。
-*   `HEADLESS`, `HIDE_WINDOW`: 控制Playwright浏览器是否显示。
-*   `CONTEXT_WINDOW`: 设置Ollama模型的上下文窗口大小。
-*   `MAX_SEARCH_RESULTS`, `MAX_PAGES_TO_SCAN`: 调整搜索行为。
-*   `HISTORY_LIMIT`: 调整AI在分析意图时考虑的历史对话轮数。
-*   `MEMORY_FILE`: 修改记忆文件的名称。
+## 📂 项目结构
 
-## 注意事项
+```text
+hybrid_agent_project/
+├── agent.py              # 核心逻辑：结合 LLM、记忆和搜索
+├── search.py             # 网页爬取：集成 Playwright & DuckDuckGo
+├── memory.py             # 记忆系统：JSON 处理 & 自动总结
+├── config.py             # 设置：模型名、超时、搜索限制
+├── main.py               # 入口点：CLI 交互循环
+├── utils.py              # 辅助工具：文本处理
+├── real_chat.txt         # 真实使用案例日志
+└── requirements.txt      # 依赖列表
+```
 
-*   网络搜索的成功率取决于网络状况和目标网站的反爬机制。
-*   Ollama模型的性能和回答质量取决于所选模型的尺寸和能力。
-*   如果需要完全隐藏浏览器：`HIDE_WINDOW = True`。
-*   如果想要看到浏览器：`HIDE_WINDOW = False`。
-
-
-## ⚠️ License / Copyright (版权声明)
+## ⚠️ License / Copyright
 
 **Copyright (c) 2026 Feng Simo. All rights reserved.**
 
-This code is for demonstration purposes only. You may not use, modify, distribute, or sublicense this code.
-
-(本项目仅供展示，保留所有权利。严禁使用、修改、分发或再次许可本项目代码。)
+This code is for **demonstration purposes only**. You may not use, modify, distribute, or sublicense this code without explicit permission.

@@ -9,7 +9,6 @@ env/
 
 # Project-specific data files (important: do not commit your private memory)
 hybrid_memory.json
-config.py
 
 # OS generated junk files
 .DS_Store
